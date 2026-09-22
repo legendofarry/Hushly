@@ -64,7 +64,7 @@ export function AgeGate() {
             <p className="font-display text-lg font-semibold">Are you 18 or older?</p>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
-            naiVibe is an adults-only dating and social discovery community. You must be at least
+            Hushly is an adults-only dating and social discovery community. You must be at least
             18 years old to continue.
           </p>
         </div>

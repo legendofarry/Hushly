@@ -1,18 +1,10 @@
-# Vibe Connect
+# naiVibe
 
-naiVibe — Modern Dating Web App
+This repository currently contains the foundation for a premium, mobile-first naiVibe dating app, but the escort marketplace product described in the living product spec is not yet fully implemented.
 
+For the complete business requirements, roadmap, product decisions, and implementation status, see [docs/naivibe-product-spec.md](docs/naivibe-product-spec.md).
 
-
-Build a complete, premium, mobile-first dating web application called naiVibe.
-
-
-
-naiVibe is an 18+ dating and social-discovery platform where people can discover profiles, connect, chat, and build relationships.
-
-
-
-Maintain a living project documentation file throughout development containing the product requirements, roadmap, completed work, architecture decisions, database structure, UI/UX decisions, security considerations, future features, known limitations, and development status.
+This project should evolve as a premium adult discovery and escort marketplace with strict onboarding, privacy, payment approval, and moderation rules.
 
 
 

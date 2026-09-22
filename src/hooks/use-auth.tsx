@@ -1,6 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  DEMO_ACCOUNT,
+  getDemoSession,
+  isDemoSessionActive,
+  signOutDemoSession,
+} from "@/lib/demo-user";
 
 type AuthContextValue = {
   session: Session | null;
@@ -21,6 +27,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (isDemoSessionActive()) {
+      setSession(getDemoSession());
+      setLoading(false);
+      return;
+    }
+
     const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
       setSession(next);
       setLoading(false);
@@ -38,6 +50,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user: session?.user ?? null,
       loading,
       signOut: async () => {
+        if (isDemoSessionActive()) {
+          signOutDemoSession();
+          setSession(null);
+          return;
+        }
         await supabase.auth.signOut();
       },
     }),
@@ -50,3 +67,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   return useContext(AuthContext);
 }
+
+export { DEMO_ACCOUNT };

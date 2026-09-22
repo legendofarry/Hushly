@@ -73,7 +73,7 @@ export function SignInPrompt({ message }: { message: string }) {
   return (
     <EmptyState
       icon={<Heart className="h-7 w-7 text-primary-foreground" fill="currentColor" />}
-      title="Join naiVibe to continue"
+      title="Join Hushly to continue"
       description={message}
       action={
         <Link

@@ -80,13 +80,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "naiVibe — meet real people in Nairobi" },
+      { title: "Hushly — meet real people in Nairobi" },
       {
         name: "description",
         content:
-          "naiVibe is an 18+ dating and social discovery community. Browse members, share your vibe and start real conversations.",
+          "Hushly is an 18+ dating and social discovery community. Browse members, share your vibe and start real conversations.",
       },
-      { property: "og:title", content: "naiVibe — meet real people in Nairobi" },
+      { property: "og:title", content: "Hushly — meet real people in Nairobi" },
       {
         property: "og:description",
         content: "An 18+ dating and social discovery community built for real connections.",

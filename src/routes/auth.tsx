@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { AlertCircle, Heart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -7,17 +7,19 @@ import { lovable } from "@/integrations/lovable";
 import { EmailField, PasswordField } from "@/components/vibe/fields";
 import { rememberEmail } from "@/lib/email-memory";
 import { trackEvent } from "@/lib/analytics";
+import { DEMO_ACCOUNT, signInDemoSession } from "@/lib/demo-user";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Join naiVibe — create your account" },
+      { title: "Join Hushly — create your account" },
       {
         name: "description",
-        content: "Create your free naiVibe account or sign in to message members and be discovered.",
+        content: "Create your free Hushly account or sign in to message members and be discovered.",
       },
-      { property: "og:title", content: "Join naiVibe" },
-      { property: "og:description", content: "Create a free naiVibe account in under a minute." },
+      { property: "og:title", content: "Join Hushly" },
+      { property: "og:description", content: "Create a free Hushly account in under a minute." },
     ],
   }),
   component: AuthPage,
@@ -25,6 +27,7 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
   const [mode, setMode] = useState<"signup" | "signin">("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,6 +36,24 @@ function AuthPage() {
   const [notice, setNotice] = useState<string | null>(null);
   const [focusEmail, setFocusEmail] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate({ to: "/me" });
+    }
+  }, [loading, navigate, user]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (user) {
+    return null;
+  }
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +73,7 @@ function AuthPage() {
         if (err) throw err;
         rememberEmail(email);
         void trackEvent("signup_completed");
-        toast.success("Welcome to naiVibe!");
+        toast.success("Welcome to Hushly!");
         navigate({ to: "/onboarding" });
       } else {
         const { error: err } = await supabase.auth.signInWithPassword({
@@ -77,7 +98,7 @@ function AuthPage() {
   };
 
   const google = async () => {
-    // Google is an add-on to an existing naiVibe account: people who have never
+    // Google is an add-on to an existing Hushly account: people who have never
     // registered are guided back to the email form instead of being signed up silently.
     const { data } = await supabase.auth.getSession();
     if (!data.session && mode === "signup") {
@@ -118,7 +139,7 @@ function AuthPage() {
         </h1>
         <p className="animate-rise mt-2 text-sm text-muted-foreground [animation-delay:60ms]">
           {mode === "signup"
-            ? "You must be 18 or older to join naiVibe."
+            ? "You must be 18 or older to join Hushly."
             : "Sign in to keep the conversation going."}
         </p>
 
@@ -177,8 +198,31 @@ function AuthPage() {
           Continue with Google
         </button>
 
+        <button
+          type="button"
+          onClick={async () => {
+            setBusy(true);
+            try {
+              signInDemoSession();
+              void trackEvent("demo_login");
+              toast.success("Demo verified account activated.");
+              navigate({ to: "/me" });
+            } finally {
+              setBusy(false);
+            }
+          }}
+          disabled={busy}
+          className="mt-3 flex w-full items-center justify-center gap-3 rounded-2xl border border-primary/50 bg-primary/10 px-6 py-4 text-sm font-semibold text-primary transition-transform active:scale-[0.97]"
+        >
+          Use demo verified account
+        </button>
+
+        <div className="mt-4 rounded-2xl border border-border bg-surface/80 p-3 text-center text-xs text-muted-foreground">
+          Demo account: {DEMO_ACCOUNT.email} / {DEMO_ACCOUNT.password}
+        </div>
+
         <p className="mt-8 text-center text-sm text-muted-foreground">
-          {mode === "signup" ? "Already a member?" : "New to naiVibe?"}{" "}
+          {mode === "signup" ? "Already a member?" : "New to Hushly?"}{" "}
           <button
             onClick={() => {
               setMode(mode === "signup" ? "signin" : "signup");

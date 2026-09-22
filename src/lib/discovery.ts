@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { DEMO_PROFILES, DEMO_TAGS } from "@/lib/demo-data";
 
 export type DiscoveryProfile = {
   id: string;
@@ -40,6 +41,85 @@ const SELECT = `
   profile_photos ( url, storage_path, is_main, position ),
   profile_tags ( tags ( slug, label, emoji, category ) )
 `;
+
+const demoProfiles = DEMO_PROFILES.map((profile) => ({
+  id: profile.id,
+  username: profile.username,
+  display_name: profile.display_name,
+  age: profile.age,
+  gender: profile.gender,
+  bio: profile.bio,
+  location_area: profile.location_area,
+  location_label: profile.location_label,
+  location_precision: profile.location_precision,
+  is_featured: profile.is_featured,
+  popularity_score: profile.popularity_score,
+  view_count: profile.view_count,
+  last_active_at: profile.last_active_at,
+  created_at: profile.created_at,
+  relationship_goal: profile.relationship_goal,
+  seeking: profile.seeking,
+  photos: profile.photos.map((url, index) => ({
+    url,
+    storage_path: null,
+    is_main: index === 0,
+    position: index,
+  })),
+  tags: profile.tags
+    .map((slug) => DEMO_TAGS.find((tag) => tag.slug === slug))
+    .filter((tag): tag is (typeof DEMO_TAGS)[number] => Boolean(tag))
+    .map((tag) => ({
+      slug: tag.slug,
+      label: tag.label,
+      emoji: tag.emoji,
+      category: tag.category,
+    })),
+})) satisfies DiscoveryProfile[];
+
+function applyDemoFilters(rows: DiscoveryProfile[], filters: DiscoveryFilters) {
+  let data = [...rows];
+
+  if (filters.gender && filters.gender !== "any") {
+    data = data.filter((profile) => profile.gender?.toLowerCase() === filters.gender?.toLowerCase());
+  }
+  if (filters.minAge) {
+    data = data.filter((profile) => (profile.age ?? 0) >= filters.minAge!);
+  }
+  if (filters.maxAge) {
+    data = data.filter((profile) => (profile.age ?? 0) <= filters.maxAge!);
+  }
+  if (filters.relationshipGoal && filters.relationshipGoal !== "any") {
+    data = data.filter((profile) =>
+      profile.relationship_goal?.toLowerCase() === filters.relationshipGoal?.toLowerCase(),
+    );
+  }
+  if (filters.area) {
+    data = data.filter((profile) =>
+      profile.location_area?.toLowerCase().includes(filters.area!.toLowerCase()),
+    );
+  }
+  if (filters.tags && filters.tags.length > 0) {
+    const wanted = new Set(filters.tags);
+    data = data.filter((profile) => profile.tags.some((tag) => wanted.has(tag.slug)));
+  }
+
+  switch (filters.sort) {
+    case "new":
+      data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      break;
+    case "popular":
+      data.sort((a, b) => b.popularity_score - a.popularity_score);
+      break;
+    case "featured":
+      data = data.filter((profile) => profile.is_featured).sort((a, b) => b.popularity_score - a.popularity_score);
+      break;
+    default:
+      data.sort((a, b) => new Date(b.last_active_at).getTime() - new Date(a.last_active_at).getTime());
+      break;
+  }
+
+  return data.slice(0, filters.limit ?? 60);
+}
 
 type RawRow = Record<string, unknown>;
 
@@ -149,75 +229,102 @@ export function scoreProfile(profile: DiscoveryProfile, tokens: string[]) {
 export type RankedProfile = DiscoveryProfile & { matchReasons: string[] };
 
 export async function fetchProfiles(filters: DiscoveryFilters = {}): Promise<RankedProfile[]> {
-  let q = supabase
-    .from("profiles")
-    .select(SELECT)
-    .eq("is_published", true)
-    .eq("visibility", "public");
+  try {
+    let q = supabase
+      .from("profiles")
+      .select(SELECT)
+      .eq("is_published", true)
+      .eq("visibility", "public");
 
-  if (filters.gender && filters.gender !== "any") q = q.eq("gender", filters.gender);
-  if (filters.minAge) q = q.gte("age", filters.minAge);
-  if (filters.maxAge) q = q.lte("age", filters.maxAge);
-  if (filters.relationshipGoal && filters.relationshipGoal !== "any") {
-    q = q.eq("relationship_goal", filters.relationshipGoal);
+    if (filters.gender && filters.gender !== "any") q = q.eq("gender", filters.gender);
+    if (filters.minAge) q = q.gte("age", filters.minAge);
+    if (filters.maxAge) q = q.lte("age", filters.maxAge);
+    if (filters.relationshipGoal && filters.relationshipGoal !== "any") {
+      q = q.eq("relationship_goal", filters.relationshipGoal);
+    }
+    if (filters.area) q = q.ilike("location_area", `%${filters.area}%`);
+    if (filters.sort === "featured") q = q.eq("is_featured", true);
+
+    switch (filters.sort) {
+      case "new":
+        q = q.order("created_at", { ascending: false });
+        break;
+      case "popular":
+        q = q.order("popularity_score", { ascending: false });
+        break;
+      default:
+        q = q.order("last_active_at", { ascending: false });
+    }
+
+    const { data, error } = await q.limit(filters.limit ?? 60);
+    if (error) throw error;
+
+    let rows = (data ?? []).map((r) => shape(r as RawRow));
+
+    if (filters.tags && filters.tags.length > 0) {
+      const wanted = new Set(filters.tags);
+      rows = rows.filter((p) => p.tags.some((t) => wanted.has(t.slug)));
+    }
+
+    const tokens = tokenize(filters.query ?? "");
+    if (tokens.length === 0) {
+      return rows.map((p) => ({ ...p, matchReasons: [] }));
+    }
+
+    return rows
+      .map((p) => {
+        const { score, reasons } = scoreProfile(p, tokens);
+        return { profile: p, score, reasons };
+      })
+      .filter((r) => r.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map((r) => ({ ...r.profile, matchReasons: r.reasons }));
+  } catch {
+    const rows = applyDemoFilters(demoProfiles, filters);
+    const tokens = tokenize(filters.query ?? "");
+
+    if (tokens.length === 0) {
+      return rows.map((profile) => ({ ...profile, matchReasons: [] }));
+    }
+
+    return rows
+      .map((profile) => {
+        const { score, reasons } = scoreProfile(profile, tokens);
+        return { ...profile, matchReasons: reasons, score };
+      })
+      .filter((profile) => profile.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map(({ score, ...profile }) => ({ ...profile, matchReasons: profile.matchReasons }));
   }
-  if (filters.area) q = q.ilike("location_area", `%${filters.area}%`);
-  if (filters.sort === "featured") q = q.eq("is_featured", true);
-
-  switch (filters.sort) {
-    case "new":
-      q = q.order("created_at", { ascending: false });
-      break;
-    case "popular":
-      q = q.order("popularity_score", { ascending: false });
-      break;
-    default:
-      q = q.order("last_active_at", { ascending: false });
-  }
-
-  const { data, error } = await q.limit(filters.limit ?? 60);
-  if (error) throw error;
-
-  let rows = (data ?? []).map((r) => shape(r as RawRow));
-
-  if (filters.tags && filters.tags.length > 0) {
-    const wanted = new Set(filters.tags);
-    rows = rows.filter((p) => p.tags.some((t) => wanted.has(t.slug)));
-  }
-
-  const tokens = tokenize(filters.query ?? "");
-  if (tokens.length === 0) {
-    return rows.map((p) => ({ ...p, matchReasons: [] }));
-  }
-
-  return rows
-    .map((p) => {
-      const { score, reasons } = scoreProfile(p, tokens);
-      return { profile: p, score, reasons };
-    })
-    .filter((r) => r.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .map((r) => ({ ...r.profile, matchReasons: r.reasons }));
 }
 
 export async function fetchProfileByUsername(username: string): Promise<DiscoveryProfile | null> {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select(SELECT)
-    .ilike("username", username)
-    .maybeSingle();
-  if (error) throw error;
-  return data ? shape(data as RawRow) : null;
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select(SELECT)
+      .ilike("username", username)
+      .maybeSingle();
+    if (error) throw error;
+    return data ? shape(data as RawRow) : null;
+  } catch {
+    const normalized = username.toLowerCase();
+    return demoProfiles.find((profile) => profile.username?.toLowerCase() === normalized) ?? null;
+  }
 }
 
 export async function fetchTags() {
-  const { data, error } = await supabase
-    .from("tags")
-    .select("slug, label, emoji, category")
-    .eq("is_active", true)
-    .order("label");
-  if (error) throw error;
-  return data ?? [];
+  try {
+    const { data, error } = await supabase
+      .from("tags")
+      .select("slug, label, emoji, category")
+      .eq("is_active", true)
+      .order("label");
+    if (error) throw error;
+    return data ?? [];
+  } catch {
+    return DEMO_TAGS;
+  }
 }
 
 export function activityLabel(lastActive: string) {

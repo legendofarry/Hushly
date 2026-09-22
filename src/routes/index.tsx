@@ -10,13 +10,13 @@ import { useAuth } from "@/hooks/use-auth";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "naiVibe — meet real people, share your vibe" },
+      { title: "Hushly — meet real people, share your vibe" },
       {
         name: "description",
         content:
-          "Discover new members, recently active singles, popular and featured profiles on naiVibe, the 18+ dating and social discovery community.",
+          "Discover new members, recently active singles, popular and featured profiles on Hushly, the 18+ dating and social discovery community.",
       },
-      { property: "og:title", content: "naiVibe — meet real people, share your vibe" },
+      { property: "og:title", content: "Hushly — meet real people, share your vibe" },
       {
         property: "og:description",
         content: "Browse members free, create a profile in minutes and start real conversations.",
@@ -100,7 +100,7 @@ function Home() {
         <div className="relative">
           <div className="flex items-center justify-between">
             <p className="font-display text-xl font-bold">
-              nai<span className="vibe-text-gradient">Vibe</span>
+              <span className="vibe-text-gradient">Hushly</span>
             </p>
             {!user && (
               <Link
@@ -135,7 +135,7 @@ function Home() {
               className="vibe-gradient flex items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-sm font-semibold text-primary-foreground shadow-xl transition-transform active:scale-[0.97]"
             >
               <Heart className="h-4 w-4" fill="currentColor" />
-              {user ? "Finish profile" : "Join naiVibe"}
+              {user ? "Finish profile" : "Join Hushly"}
             </Link>
             <Link
               to="/membership"
@@ -165,7 +165,7 @@ function Home() {
         ))}
       </div>
 
-      <Row title="New on naiVibe" subtitle="Members who just joined" sort="new" />
+      <Row title="New on Hushly" subtitle="Members who just joined" sort="new" />
       <Row title="Recently active" subtitle="Online in the last couple of days" sort="recent" />
       <Row title="Popular right now" subtitle="Most viewed profiles" sort="popular" />
       <Row title="Featured" subtitle="Handpicked members" sort="featured" />
@@ -178,7 +178,7 @@ function Home() {
           <Link to="/safety">Safety</Link>
           <Link to="/support">Support</Link>
         </div>
-        <p>naiVibe is for adults 18+. Date safely, respect everyone.</p>
+        <p>Hushly is for adults 18+. Date safely, respect everyone.</p>
       </footer>
     </AppPage>
   );

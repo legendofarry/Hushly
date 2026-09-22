@@ -12,13 +12,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/discover")({
   head: () => ({
     meta: [
-      { title: "Discover members — naiVibe" },
+      { title: "Discover members — Hushly" },
       {
         name: "description",
         content:
-          "Search naiVibe by vibe, interest, username or location and filter by age, gender, tags and relationship goals.",
+          "Search Hushly by vibe, interest, username or location and filter by age, gender, tags and relationship goals.",
       },
-      { property: "og:title", content: "Discover members on naiVibe" },
+      { property: "og:title", content: "Discover members on Hushly" },
       { property: "og:description", content: "Smart search that explains every match." },
     ],
   }),
@@ -116,7 +116,7 @@ function Discover() {
         ) : (data?.length ?? 0) === 0 ? (
           <EmptyState
             title="No members match that yet"
-            description="Try a different word, widen your filters, or check back soon — naiVibe is growing every day."
+            description="Try a different word, widen your filters, or check back soon — Hushly is growing every day."
             action={
               <button
                 onClick={() => {

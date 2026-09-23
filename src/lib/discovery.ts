@@ -42,7 +42,7 @@ const demoProfiles = DEMO_PROFILES.map((profile) => ({
   bio: profile.bio,
   location_area: profile.location_area,
   location_label: profile.location_label,
-  location_precision: profile.location_precision,
+  location_precision: profile.location_precision as DiscoveryProfile["location_precision"],
   is_featured: profile.is_featured,
   popularity_score: profile.popularity_score,
   view_count: profile.view_count,

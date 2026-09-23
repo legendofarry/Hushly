@@ -127,7 +127,7 @@ export function getLocalSession(): { user: LocalUser; expires_at: number } | nul
       window.localStorage.removeItem(SESSION_KEY);
       return null;
     }
-    return parsed;
+    return { user: parsed.user, expires_at: parsed.expires_at };
   } catch {
     return null;
   }

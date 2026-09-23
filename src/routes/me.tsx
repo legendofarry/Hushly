@@ -70,7 +70,7 @@ function MePage() {
             </div>
             <div className="flex items-center justify-between rounded-2xl border border-border bg-surface p-3">
               <span className="flex items-center gap-2"><Mail className="h-4 w-4 text-accent" /> Email</span>
-              <span className="font-semibold text-foreground">demo@naivibe.app</span>
+              <span className="font-semibold text-foreground">{demoUser.email ?? DEMO_ACCOUNT.email}</span>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-const KEY = "naivibe.emails";
+const KEY = "hushly.emails";
 const MAX = 5;
 
 export function rememberEmail(email: string) {

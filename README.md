@@ -1,8 +1,8 @@
-# naiVibe
+# Hushly
 
-This repository currently contains the foundation for a premium, mobile-first naiVibe dating app, but the escort marketplace product described in the living product spec is not yet fully implemented.
+This repository currently contains the foundation for a premium, mobile-first Hushly dating app, but the escort marketplace product described in the living product spec is not yet fully implemented.
 
-For the complete business requirements, roadmap, product decisions, and implementation status, see [docs/naivibe-product-spec.md](docs/naivibe-product-spec.md).
+For the complete business requirements, roadmap, product decisions, and implementation status, see [docs/hushly-product-spec.md](docs/hushly-product-spec.md).
 
 This project should evolve as a premium adult discovery and escort marketplace with strict onboarding, privacy, payment approval, and moderation rules.
 
@@ -24,7 +24,7 @@ Browsing Members
 
 
 
-Users can enter naiVibe and browse public dating profiles without creating an account.
+Users can enter Hushly and browse public dating profiles without creating an account.
 
 
 
@@ -232,7 +232,7 @@ Usernames should:
 
 
 
-The username should be one of the core identifiers used throughout naiVibe.
+The username should be one of the core identifiers used throughout Hushly.
 
 
 
@@ -630,7 +630,7 @@ Profiles should work both inside the application and through shareable public UR
 
 
 
-naiVibe should initially have one optional premium membership plan:
+Hushly should initially have one optional premium membership plan:
 
 
 
@@ -1058,7 +1058,7 @@ Create:
 
 
 
-New on naiVibe
+New on Hushly
 
 
 
@@ -1188,7 +1188,7 @@ Public profiles should have:
 
 
 
-A member should be able to share their naiVibe profile externally.
+A member should be able to share their Hushly profile externally.
 
 
 
@@ -1250,11 +1250,11 @@ The administrator application will be built separately.
 
 
 
-Do not build its UI inside naiVibe.
+Do not build its UI inside Hushly.
 
 
 
-naiVibe must, however, use a backend/database architecture that allows a separate administrator application to manage the platform.
+Hushly is currently configured as a frontend-only local-storage app for static hosting.
 
 
 
@@ -1824,7 +1824,7 @@ Product Vision
 
 
 
-What naiVibe is and the experience it provides.
+What Hushly is and the experience it provides.
 
 
 
@@ -2108,7 +2108,7 @@ Phase 8 — Future
 
 
 
-naiVibe should feel like a premium, modern, mobile-first dating and social-discovery application, not a generic directory.
+Hushly should feel like a premium, modern, mobile-first dating and social-discovery application, not a generic directory.
 
 
 
@@ -2120,7 +2120,7 @@ Usability → Privacy → Security → Performance → Visual quality → Scalab
 
 
 
-Build the foundation cleanly so the separate administrator application can later use the same backend to manage the entire naiVibe platform.
+Build the foundation cleanly so the separate administrator application can later use the same backend to manage the entire Hushly platform.
 
 This project was built with [Lovable](https://lovable.dev).
 

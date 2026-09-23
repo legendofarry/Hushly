@@ -1,5 +1,3 @@
-import { supabase } from "@/integrations/supabase/client";
-
 /** Privacy-conscious event logging: no PII, only event name + coarse properties. */
 export async function trackEvent(
   eventName: string,
@@ -7,13 +5,17 @@ export async function trackEvent(
   subjectId?: string,
 ) {
   try {
-    const { data } = await supabase.auth.getSession();
-    await supabase.from("analytics_events").insert({
+    const payload = {
       event_name: eventName,
-      properties: properties as never,
+      properties,
       subject_id: subjectId ?? null,
-      user_id: data.session?.user.id ?? null,
-    });
+      user_id: null,
+      tracked_at: new Date().toISOString(),
+    };
+    const key = "hushly.analytics.events";
+    const existing = JSON.parse(window.localStorage.getItem(key) ?? "[]");
+    existing.push(payload);
+    window.localStorage.setItem(key, JSON.stringify(existing));
   } catch {
     /* analytics must never break the app */
   }

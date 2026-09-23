@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Heart, ShieldCheck, Sparkles } from "lucide-react";
 
-const KEY = "naivibe.age-confirmed";
+const KEY = "hushly.age-confirmed";
 
 export function AgeGate() {
   const [ready, setReady] = useState(false);

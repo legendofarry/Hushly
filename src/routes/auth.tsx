@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { AlertCircle, Heart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { EmailField, PasswordField } from "@/components/vibe/fields";
 import { rememberEmail } from "@/lib/email-memory";
 import { trackEvent } from "@/lib/analytics";
 import { DEMO_ACCOUNT, signInDemoSession } from "@/lib/demo-user";
+import { createLocalUserAccount, signInLocalUser } from "@/lib/local-auth";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth")({
@@ -65,56 +64,38 @@ function AuthPage() {
     setBusy(true);
     try {
       if (mode === "signup") {
-        const { error: err } = await supabase.auth.signUp({
+        const result = createLocalUserAccount({
           email: email.trim(),
           password,
-          options: { emailRedirectTo: `${window.location.origin}/onboarding` },
+          full_name: email.split("@")[0] ?? email.trim(),
         });
-        if (err) throw err;
+        if (!result.ok) throw new Error(result.error);
         rememberEmail(email);
         void trackEvent("signup_completed");
         toast.success("Welcome to Hushly!");
         navigate({ to: "/onboarding" });
       } else {
-        const { error: err } = await supabase.auth.signInWithPassword({
-          email: email.trim(),
-          password,
-        });
-        if (err) throw err;
+        const result = signInLocalUser({ email: email.trim(), password });
+        if (!result.ok) throw new Error(result.error);
         rememberEmail(email);
         void trackEvent("signin_completed");
         navigate({ to: "/me" });
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Something went wrong.";
-      setError(
-        message.toLowerCase().includes("invalid login")
-          ? "That email and password don't match an account."
-          : message,
-      );
+      setError(message);
     } finally {
       setBusy(false);
     }
   };
 
   const google = async () => {
-    // Google is an add-on to an existing Hushly account: people who have never
-    // registered are guided back to the email form instead of being signed up silently.
-    const { data } = await supabase.auth.getSession();
-    if (!data.session && mode === "signup") {
-      setNotice(
-        "Register with your email and password first — then you can use Google to sign in faster.",
-      );
-      setFocusEmail(true);
-      window.setTimeout(() => setFocusEmail(false), 600);
-      return;
-    }
-    setBusy(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    setBusy(false);
-    if (result?.error) toast.error("Google sign-in didn't complete. Try again.");
+    setNotice(
+      "Google sign-in is disabled in this local-storage build. Use email signup or the demo account instead.",
+    );
+    setFocusEmail(true);
+    window.setTimeout(() => setFocusEmail(false), 600);
+    return;
   };
 
   return (
@@ -130,7 +111,7 @@ function AuthPage() {
             <Heart className="h-5 w-5 text-primary-foreground" fill="currentColor" />
           </span>
           <span className="font-display text-lg font-bold">
-            nai<span className="vibe-text-gradient">Vibe</span>
+            <span className="vibe-text-gradient">Hushly</span>
           </span>
         </Link>
 
@@ -157,7 +138,7 @@ function AuthPage() {
             value={password}
             autoComplete={mode === "signup" ? "new-password" : "current-password"}
             onChange={(e) => setPassword(e.target.value)}
-            hint={mode === "signup" ? "At least 8 characters" : undefined}
+            {...(mode === "signup" ? { hint: "At least 8 characters" } : {})}
           />
           {mode === "signup" && (
             <PasswordField
@@ -236,8 +217,8 @@ function AuthPage() {
         </p>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          By continuing you agree to our <Link to="/terms" className="underline">Terms</Link> and{" "}
-          <Link to="/privacy" className="underline">Privacy Policy</Link>.
+          By continuing you agree to our <a href="/terms" className="underline">Terms</a> and{" "}
+          <a href="/privacy" className="underline">Privacy Policy</a>.
         </p>
       </div>
     </div>

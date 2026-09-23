@@ -1,5 +1,5 @@
-export const ESCORT_ONBOARDING_KEY = "naivibe.escort-onboarding";
-export const ESCORT_PAYMENT_KEY = "naivibe.escort-payment";
+export const ESCORT_ONBOARDING_KEY = "hushly.escort-onboarding";
+export const ESCORT_PAYMENT_KEY = "hushly.escort-payment";
 
 export type EscortLocationPrecision = "exact" | "approximate";
 
@@ -50,7 +50,7 @@ const RESERVED_USERNAMES = new Set([
   "support",
   "help",
   "owner",
-  "naivibe",
+  "hushly",
   "moderation",
   "billing",
   "staff",

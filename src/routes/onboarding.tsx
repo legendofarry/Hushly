@@ -64,7 +64,7 @@ function OnboardingPage() {
         subtitle: "Add your services, rates, keywords, and live beta preference.",
       },
     ];
-    return steps[step];
+    return steps[step] ?? steps[0]!;
   }, [step]);
 
   const validForStep = () => {

@@ -1,8 +1,8 @@
-# naiVibe Product Specification
+# Hushly Product Specification
 
 ## 1. Product overview
 
-naiVibe is a mobile-first adult discovery and escort marketplace web app. It has two core user journeys:
+Hushly is a mobile-first adult discovery and escort marketplace web app. It has two core user journeys:
 
 - Customers browse public profiles, filter and discover escorts, and contact or hire them.
 - Escorts create paid listings, complete onboarding, complete verification/payment onboarding, and manage a public profile.
@@ -492,7 +492,7 @@ The app should be built around a modern stack with:
 - React + Vite
 - Tailwind-based design system
 - TanStack Router
-- Supabase for auth, data and storage
+- Browser local storage for auth, profile data and photos in the frontend-only build
 - Local browser storage for convenience features
 - Cloud storage for uploaded profile media
 - A separate owner/admin application for approvals and moderation
@@ -549,7 +549,7 @@ The app should be built around a modern stack with:
 
 ## 19. Current repository status
 
-This repository already contains a generic dating app foundation for naiVibe, including:
+This repository already contains a generic dating app foundation for Hushly, including:
 
 - Age gate prompt
 - Auth screen flow

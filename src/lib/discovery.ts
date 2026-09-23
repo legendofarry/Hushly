@@ -1,4 +1,3 @@
-import { supabase } from "@/integrations/supabase/client";
 import { DEMO_PROFILES, DEMO_TAGS } from "@/lib/demo-data";
 
 export type DiscoveryProfile = {
@@ -23,24 +22,16 @@ export type DiscoveryProfile = {
 };
 
 export type DiscoveryFilters = {
-  query?: string;
-  gender?: string;
-  minAge?: number;
-  maxAge?: number;
+  query?: string | undefined;
+  gender?: string | undefined;
+  minAge?: number | undefined;
+  maxAge?: number | undefined;
   tags?: string[];
-  relationshipGoal?: string;
-  sort?: "recent" | "new" | "popular" | "featured";
-  area?: string;
-  limit?: number;
+  relationshipGoal?: string | undefined;
+  sort?: "recent" | "new" | "popular" | "featured" | undefined;
+  area?: string | undefined;
+  limit?: number | undefined;
 };
-
-const SELECT = `
-  id, username, display_name, age, gender, bio, location_area, location_label,
-  location_precision, is_featured, popularity_score, view_count, last_active_at,
-  created_at, relationship_goal, seeking,
-  profile_photos ( url, storage_path, is_main, position ),
-  profile_tags ( tags ( slug, label, emoji, category ) )
-`;
 
 const demoProfiles = DEMO_PROFILES.map((profile) => ({
   id: profile.id,
@@ -121,50 +112,6 @@ function applyDemoFilters(rows: DiscoveryProfile[], filters: DiscoveryFilters) {
   return data.slice(0, filters.limit ?? 60);
 }
 
-type RawRow = Record<string, unknown>;
-
-function shape(row: RawRow): DiscoveryProfile {
-  const photos = ((row["profile_photos"] as RawRow[] | null) ?? [])
-    .map((p) => ({
-      url: String(p["url"] ?? ""),
-      storage_path: (p["storage_path"] as string | null) ?? null,
-      is_main: Boolean(p["is_main"]),
-      position: Number(p["position"] ?? 0),
-    }))
-    .sort((a, b) => Number(b.is_main) - Number(a.is_main) || a.position - b.position);
-
-  const tags = ((row["profile_tags"] as RawRow[] | null) ?? [])
-    .map((pt) => pt["tags"] as RawRow | null)
-    .filter(Boolean)
-    .map((t) => ({
-      slug: String(t!["slug"]),
-      label: String(t!["label"]),
-      emoji: (t!["emoji"] as string | null) ?? null,
-      category: String(t!["category"] ?? "interest"),
-    }));
-
-  return {
-    id: String(row["id"]),
-    username: (row["username"] as string | null) ?? null,
-    display_name: (row["display_name"] as string | null) ?? null,
-    age: (row["age"] as number | null) ?? null,
-    gender: (row["gender"] as string | null) ?? null,
-    bio: (row["bio"] as string | null) ?? null,
-    location_area: (row["location_area"] as string | null) ?? null,
-    location_label: (row["location_label"] as string | null) ?? null,
-    location_precision: (row["location_precision"] as "exact" | "approximate") ?? "approximate",
-    is_featured: Boolean(row["is_featured"]),
-    popularity_score: Number(row["popularity_score"] ?? 0),
-    view_count: Number(row["view_count"] ?? 0),
-    last_active_at: String(row["last_active_at"]),
-    created_at: String(row["created_at"]),
-    relationship_goal: (row["relationship_goal"] as string | null) ?? null,
-    seeking: ((row["seeking"] as string[] | null) ?? []) as string[],
-    tags,
-    photos,
-  };
-}
-
 /** Words that shouldn't drive matching. */
 const STOP_WORDS = new Set([
   "a","an","the","and","or","for","with","who","that","likes","like","love","loves",
@@ -229,102 +176,30 @@ export function scoreProfile(profile: DiscoveryProfile, tokens: string[]) {
 export type RankedProfile = DiscoveryProfile & { matchReasons: string[] };
 
 export async function fetchProfiles(filters: DiscoveryFilters = {}): Promise<RankedProfile[]> {
-  try {
-    let q = supabase
-      .from("profiles")
-      .select(SELECT)
-      .eq("is_published", true)
-      .eq("visibility", "public");
+  const rows = applyDemoFilters(demoProfiles, filters);
+  const tokens = tokenize(filters.query ?? "");
 
-    if (filters.gender && filters.gender !== "any") q = q.eq("gender", filters.gender);
-    if (filters.minAge) q = q.gte("age", filters.minAge);
-    if (filters.maxAge) q = q.lte("age", filters.maxAge);
-    if (filters.relationshipGoal && filters.relationshipGoal !== "any") {
-      q = q.eq("relationship_goal", filters.relationshipGoal);
-    }
-    if (filters.area) q = q.ilike("location_area", `%${filters.area}%`);
-    if (filters.sort === "featured") q = q.eq("is_featured", true);
-
-    switch (filters.sort) {
-      case "new":
-        q = q.order("created_at", { ascending: false });
-        break;
-      case "popular":
-        q = q.order("popularity_score", { ascending: false });
-        break;
-      default:
-        q = q.order("last_active_at", { ascending: false });
-    }
-
-    const { data, error } = await q.limit(filters.limit ?? 60);
-    if (error) throw error;
-
-    let rows = (data ?? []).map((r) => shape(r as RawRow));
-
-    if (filters.tags && filters.tags.length > 0) {
-      const wanted = new Set(filters.tags);
-      rows = rows.filter((p) => p.tags.some((t) => wanted.has(t.slug)));
-    }
-
-    const tokens = tokenize(filters.query ?? "");
-    if (tokens.length === 0) {
-      return rows.map((p) => ({ ...p, matchReasons: [] }));
-    }
-
-    return rows
-      .map((p) => {
-        const { score, reasons } = scoreProfile(p, tokens);
-        return { profile: p, score, reasons };
-      })
-      .filter((r) => r.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map((r) => ({ ...r.profile, matchReasons: r.reasons }));
-  } catch {
-    const rows = applyDemoFilters(demoProfiles, filters);
-    const tokens = tokenize(filters.query ?? "");
-
-    if (tokens.length === 0) {
-      return rows.map((profile) => ({ ...profile, matchReasons: [] }));
-    }
-
-    return rows
-      .map((profile) => {
-        const { score, reasons } = scoreProfile(profile, tokens);
-        return { ...profile, matchReasons: reasons, score };
-      })
-      .filter((profile) => profile.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map(({ score, ...profile }) => ({ ...profile, matchReasons: profile.matchReasons }));
+  if (tokens.length === 0) {
+    return rows.map((profile) => ({ ...profile, matchReasons: [] }));
   }
+
+  return rows
+    .map((profile) => {
+      const { score, reasons } = scoreProfile(profile, tokens);
+      return { ...profile, matchReasons: reasons, score };
+    })
+    .filter((profile) => profile.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map(({ score, ...profile }) => ({ ...profile, matchReasons: profile.matchReasons }));
 }
 
 export async function fetchProfileByUsername(username: string): Promise<DiscoveryProfile | null> {
-  try {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select(SELECT)
-      .ilike("username", username)
-      .maybeSingle();
-    if (error) throw error;
-    return data ? shape(data as RawRow) : null;
-  } catch {
-    const normalized = username.toLowerCase();
-    return demoProfiles.find((profile) => profile.username?.toLowerCase() === normalized) ?? null;
-  }
+  const normalized = username.toLowerCase();
+  return demoProfiles.find((profile) => profile.username?.toLowerCase() === normalized) ?? null;
 }
 
 export async function fetchTags() {
-  try {
-    const { data, error } = await supabase
-      .from("tags")
-      .select("slug, label, emoji, category")
-      .eq("is_active", true)
-      .order("label");
-    if (error) throw error;
-    return data ?? [];
-  } catch {
-    return DEMO_TAGS;
-  }
+  return DEMO_TAGS;
 }
 
 export function activityLabel(lastActive: string) {

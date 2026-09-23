@@ -1,5 +1,5 @@
 export const DEMO_ACCOUNT = {
-  email: "demo@naivibe.app",
+  email: "demo@hushly.app",
   password: "Demo123!",
   id: "demo-user-verified-active",
   displayName: "Demo Verified",
@@ -7,7 +7,8 @@ export const DEMO_ACCOUNT = {
   verified: true,
 };
 
-const DEMO_SESSION_KEY = "naivibe.demo-session";
+const DEMO_SESSION_KEY = "hushly.demo-session";
+export const AUTH_CHANGE_EVENT = "hushly-auth-change";
 
 export function signInDemoSession() {
   if (typeof window === "undefined") return false;
@@ -25,6 +26,7 @@ export function signInDemoSession() {
   };
 
   window.localStorage.setItem(DEMO_SESSION_KEY, JSON.stringify(session));
+  window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
   return true;
 }
 
@@ -55,4 +57,5 @@ export function isDemoSessionActive() {
 export function signOutDemoSession() {
   if (typeof window === "undefined") return;
   window.localStorage.removeItem(DEMO_SESSION_KEY);
+  window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
 }

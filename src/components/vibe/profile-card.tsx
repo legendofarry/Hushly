@@ -23,8 +23,7 @@ export function ProfileCard({ profile, className, compact }: Props) {
 
   return (
     <Link
-      to="/u/$username"
-      params={{ username: profile.username ?? "" }}
+      to="/discover"
       className={cn(
         "group relative block overflow-hidden rounded-3xl border border-border/60 bg-surface shadow-lg transition-transform duration-300 active:scale-[0.98]",
         compact ? "w-[63vw] max-w-[240px] shrink-0" : "",

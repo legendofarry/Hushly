@@ -172,10 +172,10 @@ function Home() {
 
       <footer className="mt-10 space-y-3 px-4 text-center text-xs text-muted-foreground">
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
-          <Link to="/terms">Terms</Link>
-          <Link to="/privacy">Privacy</Link>
-          <Link to="/guidelines">Community</Link>
-          <Link to="/safety">Safety</Link>
+          <a href="/terms">Terms</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/guidelines">Community</a>
+          <a href="/safety">Safety</a>
           <Link to="/support">Support</Link>
         </div>
         <p>Hushly is for adults 18+. Date safely, respect everyone.</p>

@@ -6,31 +6,17 @@ For the complete business requirements, roadmap, product decisions, and implemen
 
 This project should evolve as a premium adult discovery and escort marketplace with strict onboarding, privacy, payment approval, and moderation rules.
 
-
-
 ---
-
-
 
 1. User Types
 
-
-
 There are two main user experiences:
-
-
 
 Browsing Members
 
-
-
 Users can enter Hushly and browse public dating profiles without creating an account.
 
-
-
 They can:
-
-
 
 - Browse profiles
 
@@ -52,19 +38,11 @@ They can:
 
 - Share public profile pages
 
-
-
 An account should only be required when a user attempts an action that requires authentication, such as messaging or maintaining their own profile.
-
-
 
 Registered Members
 
-
-
 Registered members can:
-
-
 
 - Create a dating profile
 
@@ -94,23 +72,13 @@ Registered members can:
 
 - Enable biometric app locking
 
-
-
 ---
-
-
 
 2. Age Confirmation
 
-
-
 On the first visit, display a modern animated screen asking the user to confirm that they are 18 or older.
 
-
-
 The experience should be:
-
-
 
 - Full screen
 
@@ -124,23 +92,13 @@ The experience should be:
 
 - Mobile-friendly
 
-
-
 After confirmation, do not repeatedly ask the same user unnecessarily.
-
-
 
 ---
 
-
-
 3. Registration
 
-
-
 Support normal:
-
-
 
 - Email
 
@@ -148,23 +106,13 @@ Support normal:
 
 - Password confirmation
 
-
-
 Every password field must include a show/hide password preview button.
-
-
 
 Also support Google sign-in.
 
-
-
 Google sign-in should be associated with an existing registered account rather than silently creating an unexpected account.
 
-
-
 If a user attempts Google sign-in when they need to register first:
-
-
 
 - Show a clear informational banner.
 
@@ -172,23 +120,13 @@ If a user attempts Google sign-in when they need to register first:
 
 - If technically supported by the browser/device authentication environment, prefill the recognized email address.
 
-
-
 ---
-
-
 
 4. Email Convenience
 
-
-
 Every email field throughout the application should remember previously used email addresses locally.
 
-
-
 When the user focuses an email field:
-
-
 
 - Show previously used email suggestions.
 
@@ -196,27 +134,15 @@ When the user focuses an email field:
 
 - Automatically populate the field after selection.
 
-
-
 Use privacy-conscious local storage.
-
-
 
 ---
 
-
-
 5. Username System
-
-
 
 Every registered member should have a unique username.
 
-
-
 Usernames should:
-
-
 
 - Be unique.
 
@@ -230,27 +156,15 @@ Usernames should:
 
 - Prevent duplicates.
 
-
-
 The username should be one of the core identifiers used throughout Hushly.
-
-
 
 ---
 
-
-
 6. Dating Onboarding
-
-
 
 Every registered member should go through a polished onboarding experience.
 
-
-
 Collect appropriate information such as:
-
-
 
 - Username
 
@@ -280,11 +194,7 @@ Collect appropriate information such as:
 
 - Optional future-feature preferences
 
-
-
 The onboarding experience should use a multi-step modern interface with:
-
-
 
 - Progress indicator
 
@@ -300,97 +210,51 @@ The onboarding experience should use a multi-step modern interface with:
 
 - Skeleton/loading states
 
-
-
 ---
-
-
 
 7. Phone & WhatsApp
 
-
-
 Phone number should be available as an account/profile field.
-
-
 
 WhatsApp should be optional.
 
-
-
 Include a convenient:
-
-
 
 Same as phone number
 
-
-
 action that automatically copies the phone number into the WhatsApp field.
-
-
 
 The user should still be able to edit it afterward.
 
-
-
 ---
-
-
 
 8. Location
 
-
-
 Allow members to provide their location manually.
-
-
 
 Also provide:
 
-
-
 Use my current location
-
-
 
 where browser/device permissions support location access.
 
-
-
 When location is detected, let the user choose whether their profile uses:
-
-
 
 - Exact location
 
 - Approximate location
 
-
-
 Public profile displays must respect this choice.
-
-
 
 Do not expose private exact coordinates unnecessarily.
 
-
-
 ---
-
-
 
 9. Dating Interests & Tags
 
-
-
 Create a dedicated interests/tags system.
 
-
-
 Members can add multiple keywords describing:
-
-
 
 - Interests
 
@@ -404,11 +268,7 @@ Members can add multiple keywords describing:
 
 - General characteristics
 
-
-
 Examples:
-
-
 
 - Travel
 
@@ -430,31 +290,17 @@ Examples:
 
 - Professional
 
-
-
 Location should not be stored as a profile tag.
-
-
 
 Tags should be searchable and usable by the discovery system.
 
-
-
 ---
-
-
 
 10. Intelligent Discovery
 
-
-
 Do not make search behave like a basic database keyword search.
 
-
-
 Build a smart discovery system that can understand:
-
-
 
 - Usernames
 
@@ -468,39 +314,21 @@ Build a smart discovery system that can understand:
 
 - Relevant profile information
 
-
-
 For example, if a member has the tag “Travel”, searching for “travel” should make that profile eligible for discovery results.
-
-
 
 Search should intelligently combine the user's query with available filters.
 
-
-
 Results should remain predictable and explainable.
-
-
 
 If advanced AI search becomes unnecessary, provide a strong traditional filtering system while maintaining the same polished UX.
 
-
-
 ---
-
-
 
 11. Filters
 
-
-
 Create a powerful mobile-friendly filtering interface.
 
-
-
 Possible filters:
-
-
 
 - Gender
 
@@ -522,31 +350,17 @@ Possible filters:
 
 - Featured profiles
 
-
-
 Filters should update results quickly.
-
-
 
 Use a modern bottom-sheet/filter-panel experience on mobile.
 
-
-
 ---
-
-
 
 12. Profile Cards
 
-
-
 Create beautiful dating-profile cards.
 
-
-
 Cards can display:
-
-
 
 - Main photo
 
@@ -570,27 +384,15 @@ Cards can display:
 
 - Featured indicator
 
-
-
 Cards should use modern layouts and subtle animations.
-
-
 
 ---
 
-
-
 13. Public Profile
-
-
 
 Every member should have a polished public profile.
 
-
-
 Include:
-
-
 
 - Photo gallery
 
@@ -616,43 +418,23 @@ Include:
 
 - Connect/message actions where authentication is required
 
-
-
 Profiles should work both inside the application and through shareable public URLs.
-
-
 
 ---
 
-
-
 14. Premium Membership
-
-
 
 Hushly should initially have one optional premium membership plan:
 
-
-
 KES 500/month
-
-
 
 The payment workflow should be designed around manual payment confirmation.
 
-
-
 The application does not directly process or hold the payment.
-
-
 
 Payment instructions can be displayed in the membership screen.
 
-
-
 Members can:
-
-
 
 1. Select the KES 500 monthly plan.
 
@@ -668,43 +450,23 @@ Members can:
 
 7. Enter a pending approval state.
 
-
-
 Payment destination:
-
-
 
 M-Pesa: 0715938110
 
-
-
 The system should clearly communicate that payment verification is handled by the platform administrator.
-
-
 
 ---
 
-
-
 15. Membership Approval
-
-
 
 After submitting payment confirmation:
 
-
-
 Status becomes:
-
-
 
 Pending Approval
 
-
-
 The user should see:
-
-
 
 - Current status
 
@@ -714,15 +476,9 @@ The user should see:
 
 - Relevant instructions
 
-
-
 Prevent duplicate submissions while the current request is pending.
 
-
-
 Possible states:
-
-
 
 - Draft
 
@@ -738,27 +494,15 @@ Possible states:
 
 - Suspended
 
-
-
 The separate administrator application will manage approval.
-
-
 
 ---
 
-
-
 16. Post-Approval Setup
-
-
 
 After membership approval, display a profile-completion/setup screen.
 
-
-
 Show:
-
-
 
 - Completed sections
 
@@ -770,55 +514,29 @@ Show:
 
 - Publish/profile visibility state
 
-
-
 Make the setup process feel like a modern guided experience.
 
-
-
 ---
-
-
 
 17. Future Live Feature
 
-
-
 Allow members to optionally express interest in an upcoming live dating/social feature.
-
-
 
 Explain that users who opt in can be among the first invited to test the beta once it launches.
 
-
-
 Store this preference in the backend.
-
-
 
 Do not build the complete live feature yet.
 
-
-
 ---
-
-
 
 18. Notifications
 
-
-
 Notifications should be an overlay/panel, not a separate primary navigation screen.
-
-
 
 The notification panel should slide over the current page.
 
-
-
 Group notifications into:
-
-
 
 - Important system notifications
 
@@ -832,11 +550,7 @@ Group notifications into:
 
 - Safety/security alerts
 
-
-
 Each notification should support:
-
-
 
 - Mark as read
 
@@ -854,31 +568,17 @@ Each notification should support:
 
 - Relevant icon/illustration
 
-
-
 Use polished illustrations, Lottie animations, icons, and modern empty states.
-
-
 
 ---
 
-
-
 19. Chat
-
-
 
 Create a modern messaging system.
 
-
-
 When a chat notification is selected, the conversation should slide into a full-screen chat view.
 
-
-
 Chat should include:
-
-
 
 - Conversation history
 
@@ -898,63 +598,35 @@ Chat should include:
 
 - Modern message bubbles
 
-
-
 At the top display:
-
-
 
 - Avatar
 
 - Username
 
-
-
 Clicking the avatar or username opens that member's public profile.
-
-
 
 ---
 
-
-
 20. Biometric Security
 
-
-
 Support device biometric authentication where available:
-
-
 
 - Fingerprint
 
 - Face authentication / Face ID
 
-
-
 Biometric protection should be optional.
-
-
 
 If enabled, the user should be able to use biometric unlock instead of repeatedly entering their credentials.
 
-
-
 Keep normal account credentials available as a secure fallback/recovery method.
-
-
 
 ---
 
-
-
 21. App Lock
 
-
-
 Inside Preferences, allow users to configure:
-
-
 
 - Automatic lock after inactivity
 
@@ -962,11 +634,7 @@ Inside Preferences, allow users to configure:
 
 - Other supported lock conditions
 
-
-
 The lock screen should be:
-
-
 
 - Full screen
 
@@ -982,23 +650,13 @@ The lock screen should be:
 
 - Highly polished
 
-
-
 The experience should resemble a modern native mobile application.
-
-
 
 ---
 
-
-
 22. Homepage
 
-
-
 Create a premium dating discovery homepage containing:
-
-
 
 - Hero section
 
@@ -1020,117 +678,61 @@ Create a premium dating discovery homepage containing:
 
 - Profile creation call-to-action
 
-
-
 Use dynamic sections where appropriate.
 
-
-
 ---
-
-
 
 23. Recently Active
 
-
-
 Create a dedicated section showing recently active members.
-
-
 
 Use privacy-conscious activity indicators.
 
-
-
 Do not expose sensitive activity information.
 
-
-
 ---
-
-
 
 24. New Members
 
-
-
 Create:
-
-
 
 New on Hushly
 
-
-
 Show recently created/public profiles using attractive cards and subtle animations.
-
-
 
 ---
 
-
-
 25. Popular & Featured
 
-
-
 Create:
-
-
 
 - Popular members
 
 - Featured members
 
-
-
 The ranking system should be configurable from the backend.
-
-
 
 Featured status should eventually be controllable through the administrator application.
 
-
-
 ---
-
-
 
 26. Location-Based Discovery
 
-
-
 Support location-aware discovery.
-
-
 
 Members should be able to discover other members based on general location and distance.
 
-
-
 Respect each member's selected location precision.
-
-
 
 Never expose an exact location when the member selected approximate location.
 
-
-
 ---
-
-
 
 27. Analytics
 
-
-
 Implement analytics infrastructure for useful aggregate statistics.
 
-
-
 Track appropriate events such as:
-
-
 
 - Profile views
 
@@ -1152,23 +754,13 @@ Track appropriate events such as:
 
 - Recently active members
 
-
-
 Use privacy-conscious analytics.
-
-
 
 ---
 
-
-
 28. SEO & Shareable Profiles
 
-
-
 Public profiles should have:
-
-
 
 - SEO-friendly URLs
 
@@ -1186,41 +778,23 @@ Public profiles should have:
 
 - Canonical URLs
 
-
-
 A member should be able to share their Hushly profile externally.
-
-
 
 ---
 
-
-
 29. Support Center
-
-
 
 Create a Help & Support Center.
 
-
-
 Support contact:
-
-
 
 Email: moderation.mails.go@gmail.com
 
 WhatsApp: 0762634893
 
-
-
 Also provide an in-app support form.
 
-
-
 Fields:
-
-
 
 - Name
 
@@ -1232,35 +806,19 @@ Fields:
 
 - Optional attachment
 
-
-
 Store support requests in the backend for administrator management.
-
-
 
 ---
 
-
-
 30. Administrator Application Integration
-
-
 
 The administrator application will be built separately.
 
-
-
 Do not build its UI inside Hushly.
-
-
 
 Hushly is currently configured as a frontend-only local-storage app for static hosting.
 
-
-
 The backend should support management of:
-
-
 
 - Users
 
@@ -1290,23 +848,13 @@ The backend should support management of:
 
 - Platform configuration
 
-
-
 Do not make assumptions about the administrator application's interface.
-
-
 
 ---
 
-
-
 31. Safety & Moderation
 
-
-
 Build appropriate infrastructure for:
-
-
 
 - User reports
 
@@ -1328,23 +876,13 @@ Build appropriate infrastructure for:
 
 - Suspicious activity detection
 
-
-
 The platform should have clear community guidelines.
-
-
 
 ---
 
-
-
 32. Legal Pages
 
-
-
 Include:
-
-
 
 - Terms of Service
 
@@ -1354,27 +892,15 @@ Include:
 
 - Safety Guidelines
 
-
-
 Make these easily accessible.
-
-
 
 ---
 
-
-
 33. Account Preferences
-
-
 
 Create a modern settings area.
 
-
-
 Account
-
-
 
 - Email
 
@@ -1386,11 +912,7 @@ Account
 
 - Account information
 
-
-
 Security
-
-
 
 - Password
 
@@ -1402,11 +924,7 @@ Security
 
 - Active sessions where appropriate
 
-
-
 Privacy
-
-
 
 - Location precision
 
@@ -1414,11 +932,7 @@ Privacy
 
 - Privacy controls
 
-
-
 Notifications
-
-
 
 - Message notifications
 
@@ -1428,11 +942,7 @@ Notifications
 
 - Promotional notifications
 
-
-
 Dating Profile
-
-
 
 - Photos
 
@@ -1446,27 +956,15 @@ Dating Profile
 
 - Profile completion
 
-
-
 ---
-
-
 
 34. Navigation
 
-
-
 Use a modern mobile-first navigation system.
-
-
 
 Primary navigation can use a bottom navigation bar.
 
-
-
 For deeply nested screens:
-
-
 
 - Hide bottom navigation.
 
@@ -1476,35 +974,19 @@ For deeply nested screens:
 
 - Use smooth screen transitions.
 
-
-
 The nested view should feel like a native mobile screen rather than a web page inside another page.
-
-
 
 ---
 
-
-
 35. Typography
-
-
 
 Use:
 
-
-
 Figtree and Outfit
-
-
 
 throughout the application.
 
-
-
 Establish a consistent typography system for:
-
-
 
 - Headings
 
@@ -1522,23 +1004,13 @@ Establish a consistent typography system for:
 
 - Notifications
 
-
-
 ---
-
-
 
 36. Visual Direction
 
-
-
 The UI should be extremely modern and premium.
 
-
-
 Use:
-
-
 
 - Bento layouts
 
@@ -1566,27 +1038,15 @@ Use:
 
 - High-quality imagery
 
-
-
 Avoid generic templates.
-
-
 
 The final product should look like a professionally designed modern dating application.
 
-
-
 ---
-
-
 
 37. Animation
 
-
-
 Use polished animations for:
-
-
 
 - Onboarding
 
@@ -1616,27 +1076,15 @@ Use polished animations for:
 
 - Form progression
 
-
-
 Animations should be smooth and fast without hurting performance.
-
-
 
 ---
 
-
-
 38. Performance
-
-
 
 Optimize for mobile networks.
 
-
-
 Implement:
-
-
 
 - Lazy-loaded images
 
@@ -1656,19 +1104,11 @@ Implement:
 
 - Fast initial page load
 
-
-
 ---
-
-
 
 39. Security
 
-
-
 Implement:
-
-
 
 - Secure authentication
 
@@ -1696,23 +1136,13 @@ Implement:
 
 - Protection against unauthorized membership/payment modification
 
-
-
 Never rely exclusively on frontend validation.
-
-
 
 ---
 
-
-
 40. Loading & Empty States
 
-
-
 Every major screen needs polished:
-
-
 
 - Loading state
 
@@ -1726,27 +1156,15 @@ Every major screen needs polished:
 
 - Pending state
 
-
-
 Use modern illustrations, Lotties, animations, and helpful copy.
-
-
 
 ---
 
-
-
 41. Backend Data Architecture
-
-
 
 Design the backend for future scalability and administrator integration.
 
-
-
 Core entities should include:
-
-
 
 - Users
 
@@ -1798,107 +1216,55 @@ Core entities should include:
 
 - Featured-profile configuration
 
-
-
 Use appropriate relationships, indexes, security rules, and validation.
-
-
 
 ---
 
-
-
 42. Living Documentation
-
-
 
 Maintain a documentation file inside the project.
 
-
-
 Continuously document:
-
-
 
 Product Vision
 
-
-
 What Hushly is and the experience it provides.
-
-
 
 Current Features
 
-
-
 What has already been implemented.
-
-
 
 Roadmap
 
-
-
 What is planned next.
-
-
 
 Architecture
 
-
-
 Important technical decisions.
-
-
 
 Database
 
-
-
 Entities, fields, relationships, indexes, and security rules.
-
-
 
 Authentication
 
-
-
 Registration, login, Google authentication, sessions, biometrics, and recovery.
-
-
 
 UI/UX
 
-
-
 Design system, typography, layouts, navigation, animations, and responsive behavior.
-
-
 
 Security
 
-
-
 Security measures and known risks.
-
-
 
 Future Features
 
-
-
 Ideas discussed but not yet implemented.
-
-
 
 Development Status
 
-
-
 Every feature should be labeled:
-
-
 
 - Planned
 
@@ -1912,23 +1278,13 @@ Every feature should be labeled:
 
 - Future
 
-
-
 Update the documentation as development progresses.
-
-
 
 ---
 
-
-
 43. Development Roadmap
 
-
-
 Phase 1 — Foundation
-
-
 
 - Project setup
 
@@ -1946,11 +1302,7 @@ Phase 1 — Foundation
 
 - Navigation
 
-
-
 Phase 2 — Dating Profiles
-
-
 
 - Registration
 
@@ -1972,11 +1324,7 @@ Phase 2 — Dating Profiles
 
 - Public profiles
 
-
-
 Phase 3 — Discovery
-
-
 
 - Homepage
 
@@ -1998,11 +1346,7 @@ Phase 3 — Discovery
 
 - Location discovery
 
-
-
 Phase 4 — Membership
-
-
 
 - KES 500 monthly plan
 
@@ -2022,11 +1366,7 @@ Phase 4 — Membership
 
 - Profile setup after approval
 
-
-
 Phase 5 — Communication
-
-
 
 - Notification overlay
 
@@ -2042,11 +1382,7 @@ Phase 5 — Communication
 
 - Administrator messages
 
-
-
 Phase 6 — Security
-
-
 
 - Biometric unlock
 
@@ -2062,11 +1398,7 @@ Phase 6 — Security
 
 - Abuse prevention
 
-
-
 Phase 7 — Growth & Performance
-
-
 
 - SEO
 
@@ -2080,11 +1412,7 @@ Phase 7 — Growth & Performance
 
 - Loading/empty/error states
 
-
-
 Phase 8 — Future
-
-
 
 - Live dating/social beta
 
@@ -2098,27 +1426,15 @@ Phase 8 — Future
 
 - Future features based on user feedback
 
-
-
 ---
-
-
 
 44. Core Product Principle
 
-
-
 Hushly should feel like a premium, modern, mobile-first dating and social-discovery application, not a generic directory.
-
-
 
 Prioritize:
 
-
-
 Usability → Privacy → Security → Performance → Visual quality → Scalability
-
-
 
 Build the foundation cleanly so the separate administrator application can later use the same backend to manage the entire Hushly platform.
 
@@ -2142,3 +1458,4 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+# Hushly

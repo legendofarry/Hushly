@@ -1,5 +1,5 @@
 import { animate, motion, useMotionValue, useTransform, type PanInfo } from "motion/react";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Briefcase, Info, MapPin } from "lucide-react";
 import { ageFrom, type Profile } from "@/lib/hushly";
 import { cn } from "@/lib/utils";
@@ -40,13 +40,13 @@ export const SwipeCard = forwardRef<SwipeCardHandle, Props>(function SwipeCard({
   const [leaving, setLeaving] = useState(false);
   const photos = profile.photos?.length ? profile.photos : [];
 
-  if (enterFrom && isTop) {
+  useEffect(() => {
+    if (!enterFrom) return;
     // Spring back in after a rewind.
-    queueMicrotask(() => {
-      animate(x, 0, { type: "spring", stiffness: 260, damping: 24 });
-      animate(y, 0, { type: "spring", stiffness: 260, damping: 24 });
-    });
-  }
+    animate(x, 0, { type: "spring", stiffness: 260, damping: 24 });
+    animate(y, 0, { type: "spring", stiffness: 260, damping: 24 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function fly(dir: SwipeDir, velocity = 0) {
     if (leaving) return;

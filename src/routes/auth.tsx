@@ -14,9 +14,10 @@ import { Button } from "@/components/ui/button";
 type Mode = "signin" | "signup" | "forgot";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { mode?: Mode } => ({
-    mode: s.mode === "signup" || s.mode === "forgot" || s.mode === "signin" ? (s.mode as Mode) : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { mode?: Mode | undefined } => {
+    const m = s["mode"];
+    return { mode: m === "signup" || m === "forgot" || m === "signin" ? (m as Mode) : undefined };
+  },
   head: () => ({
     meta: [
       { title: "Sign in to Hushly" },

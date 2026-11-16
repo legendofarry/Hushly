@@ -14,13 +14,225 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      matches: {
+        Row: {
+          created_at: string
+          id: string
+          last_message_at: string | null
+          profile_a: string
+          profile_b: string
+          super_like: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          profile_a: string
+          profile_b: string
+          super_like?: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          profile_a?: string
+          profile_b?: string
+          super_like?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "matches_profile_a_fkey"
+            columns: ["profile_a"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "matches_profile_b_fkey"
+            columns: ["profile_b"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          match_id: string
+          read_at: string | null
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          match_id: string
+          read_at?: string | null
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          match_id?: string
+          read_at?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          bio: string
+          birthdate: string | null
+          city: string
+          created_at: string
+          demo_persona: string | null
+          gender: string
+          id: string
+          interested_in: string
+          interests: string[]
+          is_demo: boolean
+          job: string
+          name: string
+          onboarded: boolean
+          photos: string[]
+          school: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          bio?: string
+          birthdate?: string | null
+          city?: string
+          created_at?: string
+          demo_persona?: string | null
+          gender?: string
+          id?: string
+          interested_in?: string
+          interests?: string[]
+          is_demo?: boolean
+          job?: string
+          name?: string
+          onboarded?: boolean
+          photos?: string[]
+          school?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          bio?: string
+          birthdate?: string | null
+          city?: string
+          created_at?: string
+          demo_persona?: string | null
+          gender?: string
+          id?: string
+          interested_in?: string
+          interests?: string[]
+          is_demo?: boolean
+          job?: string
+          name?: string
+          onboarded?: boolean
+          photos?: string[]
+          school?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      swipes: {
+        Row: {
+          created_at: string
+          direction: string
+          id: string
+          swiper_id: string
+          target_id: string
+        }
+        Insert: {
+          created_at?: string
+          direction: string
+          id?: string
+          swiper_id: string
+          target_id: string
+        }
+        Update: {
+          created_at?: string
+          direction?: string
+          id?: string
+          swiper_id?: string
+          target_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "swipes_swiper_id_fkey"
+            columns: ["swiper_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swipes_target_id_fkey"
+            columns: ["target_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_profile_id: { Args: never; Returns: string }
+      discover_profiles: {
+        Args: { _limit?: number }
+        Returns: {
+          bio: string
+          birthdate: string | null
+          city: string
+          created_at: string
+          demo_persona: string | null
+          gender: string
+          id: string
+          interested_in: string
+          interests: string[]
+          is_demo: boolean
+          job: string
+          name: string
+          onboarded: boolean
+          photos: string[]
+          school: string
+          updated_at: string
+          user_id: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      is_match_member: { Args: { _match_id: string }; Returns: boolean }
+      mark_match_read: { Args: { _match_id: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

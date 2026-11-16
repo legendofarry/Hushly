@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedShellRouteImport } from './routes/_authenticated/_shell'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedShellDiscoverRouteImport } from './routes/_authenticated/_shell/discover'
 import { Route as AuthenticatedShellMatchesRouteImport } from './routes/_authenticated/_shell/matches'
 
 const IndexRoute = IndexRouteImport.update({
@@ -45,6 +46,12 @@ const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedShellDiscoverRoute =
+  AuthenticatedShellDiscoverRouteImport.update({
+    id: '/discover',
+    path: '/discover',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
 const AuthenticatedShellMatchesRoute =
   AuthenticatedShellMatchesRouteImport.update({
     id: '/matches',
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/discover': typeof AuthenticatedShellDiscoverRoute
   '/matches': typeof AuthenticatedShellMatchesRoute
 }
 export interface FileRoutesByTo {
@@ -64,6 +72,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/discover': typeof AuthenticatedShellDiscoverRoute
   '/matches': typeof AuthenticatedShellMatchesRoute
 }
 export interface FileRoutesById {
@@ -74,13 +83,16 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/_shell': typeof AuthenticatedShellRouteWithChildren
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/_shell/discover': typeof AuthenticatedShellDiscoverRoute
   '/_authenticated/_shell/matches': typeof AuthenticatedShellMatchesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/reset-password' | '/onboarding' | '/matches'
+  fullPaths:
+    '/' | '/auth' | '/reset-password' | '/onboarding' | '/discover' | '/matches'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/reset-password' | '/onboarding' | '/matches'
+  to:
+    '/' | '/auth' | '/reset-password' | '/onboarding' | '/discover' | '/matches'
   id:
     | '__root__'
     | '/'
@@ -89,6 +101,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/_shell'
     | '/_authenticated/onboarding'
+    | '/_authenticated/_shell/discover'
     | '/_authenticated/_shell/matches'
   fileRoutesById: FileRoutesById
 }
@@ -143,6 +156,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/_shell/discover': {
+      id: '/_authenticated/_shell/discover'
+      path: '/discover'
+      fullPath: '/discover'
+      preLoaderRoute: typeof AuthenticatedShellDiscoverRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
     '/_authenticated/_shell/matches': {
       id: '/_authenticated/_shell/matches'
       path: '/matches'
@@ -154,10 +174,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedShellRouteChildren {
+  AuthenticatedShellDiscoverRoute: typeof AuthenticatedShellDiscoverRoute
   AuthenticatedShellMatchesRoute: typeof AuthenticatedShellMatchesRoute
 }
 
 const AuthenticatedShellRouteChildren: AuthenticatedShellRouteChildren = {
+  AuthenticatedShellDiscoverRoute: AuthenticatedShellDiscoverRoute,
   AuthenticatedShellMatchesRoute: AuthenticatedShellMatchesRoute,
 }
 

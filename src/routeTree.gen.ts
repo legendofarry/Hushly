@@ -17,6 +17,8 @@ import { Route as AuthenticatedShellRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedShellDiscoverRouteImport } from './routes/_authenticated/_shell/discover'
 import { Route as AuthenticatedShellMatchesRouteImport } from './routes/_authenticated/_shell/matches'
+import { Route as AuthenticatedShellProfileRouteImport } from './routes/_authenticated/_shell/profile'
+import { Route as AuthenticatedShellChatMatchIdRouteImport } from './routes/_authenticated/_shell/chat.$matchId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +60,18 @@ const AuthenticatedShellMatchesRoute =
     path: '/matches',
     getParentRoute: () => AuthenticatedShellRoute,
   } as any)
+const AuthenticatedShellProfileRoute =
+  AuthenticatedShellProfileRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellChatMatchIdRoute =
+  AuthenticatedShellChatMatchIdRouteImport.update({
+    id: '/chat/$matchId',
+    path: '/chat/$matchId',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,6 +80,8 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/discover': typeof AuthenticatedShellDiscoverRoute
   '/matches': typeof AuthenticatedShellMatchesRoute
+  '/profile': typeof AuthenticatedShellProfileRoute
+  '/chat/$matchId': typeof AuthenticatedShellChatMatchIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -74,6 +90,8 @@ export interface FileRoutesByTo {
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/discover': typeof AuthenticatedShellDiscoverRoute
   '/matches': typeof AuthenticatedShellMatchesRoute
+  '/profile': typeof AuthenticatedShellProfileRoute
+  '/chat/$matchId': typeof AuthenticatedShellChatMatchIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -85,14 +103,30 @@ export interface FileRoutesById {
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/_shell/discover': typeof AuthenticatedShellDiscoverRoute
   '/_authenticated/_shell/matches': typeof AuthenticatedShellMatchesRoute
+  '/_authenticated/_shell/profile': typeof AuthenticatedShellProfileRoute
+  '/_authenticated/_shell/chat/$matchId': typeof AuthenticatedShellChatMatchIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/reset-password' | '/onboarding' | '/discover' | '/matches'
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/onboarding'
+    | '/discover'
+    | '/matches'
+    | '/profile'
+    | '/chat/$matchId'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/auth' | '/reset-password' | '/onboarding' | '/discover' | '/matches'
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/onboarding'
+    | '/discover'
+    | '/matches'
+    | '/profile'
+    | '/chat/$matchId'
   id:
     | '__root__'
     | '/'
@@ -103,6 +137,8 @@ export interface FileRouteTypes {
     | '/_authenticated/onboarding'
     | '/_authenticated/_shell/discover'
     | '/_authenticated/_shell/matches'
+    | '/_authenticated/_shell/profile'
+    | '/_authenticated/_shell/chat/$matchId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -170,17 +206,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedShellMatchesRouteImport
       parentRoute: typeof AuthenticatedShellRoute
     }
+    '/_authenticated/_shell/profile': {
+      id: '/_authenticated/_shell/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedShellProfileRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/chat/$matchId': {
+      id: '/_authenticated/_shell/chat/$matchId'
+      path: '/chat/$matchId'
+      fullPath: '/chat/$matchId'
+      preLoaderRoute: typeof AuthenticatedShellChatMatchIdRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
   }
 }
 
 interface AuthenticatedShellRouteChildren {
   AuthenticatedShellDiscoverRoute: typeof AuthenticatedShellDiscoverRoute
   AuthenticatedShellMatchesRoute: typeof AuthenticatedShellMatchesRoute
+  AuthenticatedShellProfileRoute: typeof AuthenticatedShellProfileRoute
+  AuthenticatedShellChatMatchIdRoute: typeof AuthenticatedShellChatMatchIdRoute
 }
 
 const AuthenticatedShellRouteChildren: AuthenticatedShellRouteChildren = {
   AuthenticatedShellDiscoverRoute: AuthenticatedShellDiscoverRoute,
   AuthenticatedShellMatchesRoute: AuthenticatedShellMatchesRoute,
+  AuthenticatedShellProfileRoute: AuthenticatedShellProfileRoute,
+  AuthenticatedShellChatMatchIdRoute: AuthenticatedShellChatMatchIdRoute,
 }
 
 const AuthenticatedShellRouteWithChildren =

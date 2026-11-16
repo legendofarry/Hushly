@@ -8,7 +8,7 @@ type Props = {
   open: boolean;
   me: Profile | null;
   other: Profile | null;
-  superLike?: boolean;
+  superLike?: boolean | undefined;
   onClose: () => void;
   onSend: (text: string) => void;
 };

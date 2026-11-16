@@ -83,7 +83,7 @@ function Onboarding() {
       })
       .eq("id", me.id);
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await qc.invalidateQueries({ queryKey: ["me"] });
     qc.removeQueries({ queryKey: ["deck"] });
     navigate({ to: "/discover", replace: true });
@@ -122,7 +122,7 @@ function Onboarding() {
             className="flex-1"
           >
             <p className="text-sm font-semibold text-primary">Step {step + 1} of {total}</p>
-            <h1 className="mt-1 text-4xl font-extrabold">{steps[step].title}</h1>
+            <h1 className="mt-1 text-4xl font-extrabold">{steps[step]?.title}</h1>
 
             {step === 0 && (
               <div className="mt-8 grid gap-6">
@@ -184,7 +184,7 @@ function Onboarding() {
         </AnimatePresence>
 
         <button
-          disabled={!steps[step].valid || busy}
+          disabled={!steps[step]?.valid || busy}
           onClick={() => (step < total - 1 ? go(step + 1) : finish())}
           className="bg-brand mt-8 inline-flex h-14 items-center justify-center gap-2 rounded-full text-lg font-bold text-primary-foreground shadow-glow transition active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
         >

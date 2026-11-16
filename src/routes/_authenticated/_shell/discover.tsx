@@ -81,7 +81,7 @@ function Discover() {
       return;
     }
     const { error } = await supabase.from("swipes").delete().eq("swiper_id", me.id).eq("target_id", last.profile.id);
-    if (error) return toast.error("Couldn't rewind");
+    if (error) { toast.error("Couldn't rewind"); return; }
     setHistory((h) => h.slice(0, -1));
     setRewound({ id: last.profile.id, dir: last.dir });
     setSwiped((s) => {
@@ -94,7 +94,7 @@ function Discover() {
   async function revisitPassed() {
     if (!me) return;
     const { error } = await supabase.from("swipes").delete().eq("swiper_id", me.id).eq("direction", "nope");
-    if (error) return toast.error("Couldn't reload profiles");
+    if (error) { toast.error("Couldn't reload profiles"); return; }
     setSwiped(new Set());
     setHistory([]);
     await qc.invalidateQueries({ queryKey: ["deck"] });
@@ -119,7 +119,7 @@ function Discover() {
     const { matchId, other } = match;
     setMatch(null);
     const { error } = await supabase.from("messages").insert({ match_id: matchId, sender_id: me.id, body: text });
-    if (error) return toast.error("Message failed to send");
+    if (error) { toast.error("Message failed to send"); return; }
     qc.invalidateQueries({ queryKey: ["matches", me.id] });
     if (other.is_demo) requestSampleReply({ data: { matchId } }).catch(() => {});
     navigate({ to: "/chat/$matchId", params: { matchId } });
